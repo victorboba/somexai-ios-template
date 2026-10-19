@@ -1,0 +1,90 @@
+name: SomexApp
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: ""
+targets:
+  SomexApp:
+    type: application
+    platform: iOS
+    sources:
+      - path: SomexApp
+      - path: Shared
+    dependencies:
+      - target: SomexAppWidget
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.template
+        TARGETED_DEVICE_FAMILY: "1"
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_ENTITLEMENTS: SomexApp/SomexApp.entitlements
+    info:
+      path: SomexApp/Info.plist
+      properties:
+        CFBundleDisplayName: Somex App
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        # PhotoField needs these. Say what the photo is actually for; Apple rejects vague strings.
+        NSCameraUsageDescription: Take a photo to attach to a record.
+        NSPhotoLibraryUsageDescription: Choose a photo to attach to a record.
+        ITSAppUsesNonExemptEncryption: false
+  SomexAppWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: SomexAppWidget
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.template.widget
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_ENTITLEMENTS: SomexAppWidget/SomexAppWidget.entitlements
+        SKIP_INSTALL: YES
+    info:
+      path: SomexAppWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Somex App Widget
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+  SomexAppTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: SomexAppTests
+    dependencies:
+      - target: SomexApp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.template.tests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  SomexApp:
+    build:
+      targets:
+        SomexApp: all
+        SomexAppTests: [test]
+    run:
+      config: Debug
+      storeKitConfiguration: SomexApp/StoreKit/Products.storekit
+    test:
+      config: Debug
+      targets:
+        - SomexAppTests
+    archive:
+      config: Release
